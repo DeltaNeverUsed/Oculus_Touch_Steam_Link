@@ -472,8 +472,8 @@ public:                                                                         
             m_sSerialNumber = "WMHD316J600000_Controller_Right";
             m_sModelNumber = "Oculus Rift CV1(Right Controller)";
         } else {
-            m_sSerialNumber = "WMHD316J600000_Controller_Left";
-            m_sModelNumber = "Oculus Rift CV1(Left Controller)";
+            m_sSerialNumber = "WMHD316J66969_Controller_Left";
+            m_sModelNumber = "LeftCV1T";
         }
         log_to_buffer(__func__);
     }
@@ -835,7 +835,7 @@ public:                                                                         
         pose.result = TrackingResult_Running_OK;
         pose.deviceIsConnected = true;
 
-        ovrQuatf hand_qoffset = { 0.3420201, 0, 0, 0.9396926 };
+        ovrQuatf hand_qoffset = { -0.4953, 0, 0, 0.8687 };
         ovrQuatf hand_input = ss.HandPoses[isRightHand].ThePose.Orientation;
         ovrQuatf hand_result = ovrQuatfmul(hand_input, hand_qoffset);
         ovrVector3f hand_voffset={ 0,0,0 };
@@ -849,19 +849,32 @@ public:                                                                         
     
 
         //hand_result = ovrQuatfmul(overall_rotation, hand_result);
-        pose.qRotation.w = hand_result.w;
-        pose.qRotation.x = hand_result.x;
-        pose.qRotation.y = hand_result.y;
-        pose.qRotation.z = hand_result.z;
-        ovrVector3f position;
-        position.x = ss.HandPoses[isRightHand].ThePose.Position.x + hand_voffset.x + hand_offset2.x;
-        position.y = ss.HandPoses[isRightHand].ThePose.Position.y + hand_voffset.y + hand_offset2.y;
-        position.z = ss.HandPoses[isRightHand].ThePose.Position.z + hand_voffset.z + hand_offset2.z;
-        //position = rotateVector2(position, overall_rotation);
-        pose.vecPosition[0] = position.x;// +overall_offset.x;
-        pose.vecPosition[1] = position.y;// +overall_offset.y;
-        pose.vecPosition[2] = position.z;// +overall_offset.z;
-     
+        
+        if (isRightHand) {
+            pose.qRotation.w = hand_result.w;
+            pose.qRotation.x = hand_result.x;
+            pose.qRotation.y = hand_result.y;
+            pose.qRotation.z = hand_result.z;
+
+            ovrVector3f position;
+            position.x = ss.HandPoses[isRightHand].ThePose.Position.x + hand_voffset.x + hand_offset2.x;
+            position.y = ss.HandPoses[isRightHand].ThePose.Position.y + hand_voffset.y + hand_offset2.y;
+            position.z = ss.HandPoses[isRightHand].ThePose.Position.z + hand_voffset.z + hand_offset2.z;
+            //position = rotateVector2(position, overall_rotation);
+            pose.vecPosition[0] = position.x;// +overall_offset.x;
+            pose.vecPosition[1] = position.y;// +overall_offset.y;
+            pose.vecPosition[2] = position.z;// +overall_offset.z;
+        }
+        else {
+            pose.qRotation.w = ss.HandPoses[isRightHand].ThePose.Orientation.w;
+            pose.qRotation.x = ss.HandPoses[isRightHand].ThePose.Orientation.x;
+            pose.qRotation.y = ss.HandPoses[isRightHand].ThePose.Orientation.y;
+            pose.qRotation.z = ss.HandPoses[isRightHand].ThePose.Orientation.z;
+
+            pose.vecPosition[0] = ss.HandPoses[isRightHand].ThePose.Position.x;
+            pose.vecPosition[1] = ss.HandPoses[isRightHand].ThePose.Position.y;
+            pose.vecPosition[2] = ss.HandPoses[isRightHand].ThePose.Position.z;
+        }
 
 
         ovrVector3f linAcc = (ss.HandPoses[isRightHand].LinearAcceleration);
