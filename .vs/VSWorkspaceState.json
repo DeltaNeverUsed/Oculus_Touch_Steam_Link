@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\CustomHMD"
+    "\\CustomHMD",
+    "\\ovr_test"
   ],
-  "SelectedNode": "\\CustomHMD\\OculusTouchLink.cpp",
+  "SelectedNode": "\\ovr_test\\ovr_test.sln",
   "PreviewInSolutionExplorer": false
 }

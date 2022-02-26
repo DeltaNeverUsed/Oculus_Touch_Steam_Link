@@ -67,6 +67,7 @@ struct shared_buffer {
     ovrTrackingState tracking_state;
     uint32_t num_objects;
     ovrPoseStatef object_poses[4];
+    bool apply_extra_offsets;
 };
 
 
@@ -850,7 +851,7 @@ public:                                                                         
 
         //hand_result = ovrQuatfmul(overall_rotation, hand_result);
         
-        if (isRightHand) {
+        if (isRightHand && comm_buffer->apply_extra_offsets) {
             pose.qRotation.w = hand_result.w;
             pose.qRotation.x = hand_result.x;
             pose.qRotation.y = hand_result.y;
